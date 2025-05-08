@@ -46,21 +46,26 @@ public class MainActivity extends AppCompatActivity {
         e.addCategory(c3);
 
 
+        for(int i = 0; i < e.getCategories().size(); i++){
+            for(int k = 0; k < e.getCategories().get(i).getCount(); k++){
+                addTransaction(e.getCategories().get(k).getCategories().get(k), e.getCategories().get(i));
+            }
+        }
 
 
     }
 
-    private void addTransaction(Transaction t) {
+    private void addTransaction(Transaction t, Category c) {
         LinearLayout ll = new LinearLayout(this);
         scroll.addView(ll);
         TextView expenseName = new TextView(this);
-        expenseName.setText("Rent");
+        expenseName.setText(t.name);
         ll.addView(expenseName);
         TextView amount = new TextView(this);
-        amount.setText("$10");
+        amount.setText( String.valueOf(t.getAmount()));
         ll.addView(amount);
         TextView category = new TextView(this);
-        category.setText("Rent");
+        category.setText(c.getName());
         ll.addView(category);
     }
 }
