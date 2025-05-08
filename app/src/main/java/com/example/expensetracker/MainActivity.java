@@ -28,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         scroll = (ScrollView) findViewById(R.id.Scroll);
+        ExpenseCollection e = new ExpenseCollection(3000);
+        e.addCategory(new Category("Rent", "Red"));
+        e.addCategory(new Category("Groceries", "Green"));
+        e.addCategory(new Category("Transportation", "Blue"));
         addTransaction(transaction);
 
 
