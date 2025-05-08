@@ -28,6 +28,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         scroll = (ScrollView) findViewById(R.id.Scroll);
+        addTransaction(transaction);
+
+
+    }
+
+    private void addTransaction(Transaction t) {
         LinearLayout ll = new LinearLayout(this);
         scroll.addView(ll);
         TextView expenseName = new TextView(this);
@@ -39,18 +45,5 @@ public class MainActivity extends AppCompatActivity {
         TextView category = new TextView(this);
         category.setText("Rent");
         ll.addView(category);
-
-
-//        LinearLayout ll1 = new LinearLayout(this);
-//        scroll.addView(ll1);
-//        TextView expenseName1 = new TextView(this);
-//        expenseName1.setText("In-n-out");
-//        ll1.addView(expenseName1);
-//        TextView amount1 = new TextView(this);
-//        amount1.setText("$15");
-//        ll1.addView(amount1);
-//        TextView category1 = new TextView(this);
-//        category1.setText("Rent");
-//        ll1.addView(category1);
     }
 }
