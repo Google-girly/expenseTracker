@@ -29,10 +29,23 @@ public class MainActivity extends AppCompatActivity {
 
         scroll = (ScrollView) findViewById(R.id.Scroll);
         ExpenseCollection e = new ExpenseCollection(3000);
-        e.addCategory(new Category("Rent", "Red"));
-        e.addCategory(new Category("Groceries", "Green"));
-        e.addCategory(new Category("Transportation", "Blue"));
-        addTransaction(transaction);
+        Category c1 = new Category("Rent", "Red");
+        c1.addTransaction(new Transaction("1st half of rent", 700));
+        c1.addTransaction(new Transaction("2nd half of rent", 700));
+        c1.addTransaction(new Transaction("Light bill", 100));
+        Category c2 = new Category("Groceries", "Green");
+        c2.addTransaction(new Transaction("Fruits and veggies", 50));
+        c2.addTransaction(new Transaction("Meat", 100));
+        c2.addTransaction(new Transaction("Grains", 30));
+        Category c3 = new Category("Transportation", "Blue");
+        c3.addTransaction(new Transaction("Car payment", 200));
+        c3.addTransaction(new Transaction("Gas", 150));
+        c3.addTransaction(new Transaction("New air freshener", 10));
+        e.addCategory(c1);
+        e.addCategory(c2);
+        e.addCategory(c3);
+
+
 
 
     }
