@@ -28,7 +28,7 @@ public class Category {
         this.color = color;
     }
 
-    public ArrayList<Transaction> getCategories() {
+    public ArrayList<Transaction> getTransactions() {
         return transactions;
     }
 

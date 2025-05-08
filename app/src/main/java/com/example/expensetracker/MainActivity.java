@@ -48,9 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0; i < e.getCategories().size(); i++){
             for(int k = 0; k < e.getCategories().get(i).getCount(); k++){
-                addTransaction(e.getCategories().get(k).getCategories().get(k), e.getCategories().get(i));
+                addTransaction(e.getCategories().get(i).getTransactions().get(k), e.getCategories().get(i));
             }
         }
+
+
+        addTransaction(c1.getTransactions().get(0), c1);
+        addTransaction(c1.getTransactions().get(0), c1);
 
 
     }
