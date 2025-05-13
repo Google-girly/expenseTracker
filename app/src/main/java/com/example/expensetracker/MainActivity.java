@@ -1,11 +1,12 @@
 package com.example.expensetracker;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         btnAdd = findViewById(R.id.btnAdd);
         btnDelete = findViewById(R.id.btnDelete);
 
-        // Setup sample data
+        // Initialize data
         e = new ExpenseCollection(3000);
 
         Category c1 = new Category("Rent", "Red");
@@ -69,37 +70,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         btnAdd.setOnClickListener(v -> {
-            LayoutInflater inflater = LayoutInflater.from(this);
-            View dialogView = inflater.inflate(R.layout.dialog_add_transaction, null);
-
-            EditText inputName = dialogView.findViewById(R.id.inputName);
-            EditText inputAmount = dialogView.findViewById(R.id.inputAmount);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Add Transaction");
-            builder.setView(dialogView);
-
-            builder.setPositiveButton("Add", (dialog, which) -> {
-                String name = inputName.getText().toString().trim();
-                String amountStr = inputAmount.getText().toString().trim();
-
-                if (name.isEmpty() || amountStr.isEmpty()) {
-                    Toast.makeText(this, "Please enter both name and amount.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                try {
-                    double amount = Double.parseDouble(amountStr);
-                    Transaction newTransaction = new Transaction(name, amount);
-                    selectedCategory.addTransaction(newTransaction);
-                    addTransaction(newTransaction, selectedCategory);
-                } catch (NumberFormatException e) {
-                    Toast.makeText(this, "Invalid amount entered.", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            builder.setNegativeButton("Cancel", null);
-            builder.show();
+            Transaction newTransaction = new Transaction("Electricity Bill", 50);
+            selectedCategory.addTransaction(newTransaction);
+            addTransaction(newTransaction, selectedCategory);
         });
 
         btnDelete.setOnClickListener(v -> {
