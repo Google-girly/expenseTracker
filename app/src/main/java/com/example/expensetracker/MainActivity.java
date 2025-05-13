@@ -1,29 +1,28 @@
 package com.example.expensetracker;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.*;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-
 public class MainActivity extends AppCompatActivity {
 
     ScrollView scroll;
     LinearLayout container;
+    Button btnAdd, btnDelete;
 
-
+    ExpenseCollection e;
+    Category selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //container = findViewById(R.id.transactionContainer);
-
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -34,9 +33,13 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        scroll = (ScrollView) findViewById(R.id.Scroll);
+        scroll = findViewById(R.id.Scroll);
         container = findViewById(R.id.transactionContainer);
-        ExpenseCollection e = new ExpenseCollection(3000);
+        btnAdd = findViewById(R.id.btnAdd);
+        btnDelete = findViewById(R.id.btnDelete);
+
+        // Setup sample data
+        e = new ExpenseCollection(3000);
 
         Category c1 = new Category("Rent", "Red");
         c1.addTransaction(new Transaction("1st half of rent", 700));
@@ -57,62 +60,57 @@ public class MainActivity extends AppCompatActivity {
         e.addCategory(c2);
         e.addCategory(c3);
 
-        for(Category category: e.getCategories()){
-            for(Transaction t : category.getTransactions()){
-                addTransaction(t,category);
-            }
-        }
-        /*
-        for (int i = 0; i < e.getCategories().size(); i++) {
-            for (int k = 0; k < e.getCategories().get(i).getCount(); k++) {
-                addTransaction(e.getCategories().get(i).getTransactions().get(k), e.getCategories().get(i));
+        selectedCategory = c1;
+
+        for (Category category : e.getCategories()) {
+            for (Transaction t : category.getTransactions()) {
+                addTransaction(t, category);
             }
         }
 
+        btnAdd.setOnClickListener(v -> {
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View dialogView = inflater.inflate(R.layout.dialog_add_transaction, null);
 
-        ---removed due to it duplicating entries------
-        addTransaction(c1.getTransactions().get(0), c1);
-        addTransaction(c1.getTransactions().get(0), c1);
+            EditText inputName = dialogView.findViewById(R.id.inputName);
+            EditText inputAmount = dialogView.findViewById(R.id.inputAmount);
 
-    */
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Add Transaction");
+            builder.setView(dialogView);
+
+            builder.setPositiveButton("Add", (dialog, which) -> {
+                String name = inputName.getText().toString().trim();
+                String amountStr = inputAmount.getText().toString().trim();
+
+                if (name.isEmpty() || amountStr.isEmpty()) {
+                    Toast.makeText(this, "Please enter both name and amount.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                try {
+                    double amount = Double.parseDouble(amountStr);
+                    Transaction newTransaction = new Transaction(name, amount);
+                    selectedCategory.addTransaction(newTransaction);
+                    addTransaction(newTransaction, selectedCategory);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Invalid amount entered.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            builder.setNegativeButton("Cancel", null);
+            builder.show();
+        });
+
+        btnDelete.setOnClickListener(v -> {
+            if (!selectedCategory.getTransactions().isEmpty()) {
+                selectedCategory.deleteTransaction(
+                        selectedCategory.getTransactions().get(selectedCategory.getTransactions().size() - 1)
+                );
+                container.removeViewAt(container.getChildCount() - 1);
+            }
+        });
     }
-
-
-    /*
-    private void addTransaction(Transaction t, Category c) {
-        LinearLayout ll = new LinearLayout(this);
-        scroll.addView(ll);
-        TextView expenseName = new TextView(this);
-        expenseName.setText(t.name);
-        ll.addView(expenseName);
-        TextView amount = new TextView(this);
-        amount.setText( String.valueOf(t.getAmount()));
-        ll.addView(amount);
-        TextView category = new TextView(this);
-        category.setText(c.getName());
-        ll.addView(category);
-    }
-}
-
-     */
-//    private void addTransaction(Transaction t, Category c) {
-//        LinearLayout ll = new LinearLayout(this);
-//        ll.setOrientation(LinearLayout.HORIZONTAL);
-//
-//        TextView expenseName = new TextView(this);
-//        expenseName.setText(t.name);
-//        ll.addView(expenseName);
-//
-//        TextView amount = new TextView(this);
-//        amount.setText(String.valueOf(t.getAmount()));
-//        ll.addView(amount);
-//
-//        TextView category = new TextView(this);
-//        category.setText(c.getName());
-//        ll.addView(category);
-//
-//        container.addView(ll);
-//    }
 
     private void addTransaction(Transaction t, Category c) {
         LinearLayout ll = new LinearLayout(this);
@@ -120,15 +118,15 @@ public class MainActivity extends AppCompatActivity {
         ll.setPadding(16, 16, 16, 16);
 
         LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
         );
         rowParams.setMargins(0, 8, 0, 8);
         ll.setLayoutParams(rowParams);
 
         LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
                 0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
                 1.0f
         );
 
@@ -149,5 +147,4 @@ public class MainActivity extends AppCompatActivity {
 
         container.addView(ll);
     }
-
 }
