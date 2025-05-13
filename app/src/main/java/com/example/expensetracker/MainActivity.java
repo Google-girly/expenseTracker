@@ -94,22 +94,59 @@ public class MainActivity extends AppCompatActivity {
 }
 
      */
+//    private void addTransaction(Transaction t, Category c) {
+//        LinearLayout ll = new LinearLayout(this);
+//        ll.setOrientation(LinearLayout.HORIZONTAL);
+//
+//        TextView expenseName = new TextView(this);
+//        expenseName.setText(t.name);
+//        ll.addView(expenseName);
+//
+//        TextView amount = new TextView(this);
+//        amount.setText(String.valueOf(t.getAmount()));
+//        ll.addView(amount);
+//
+//        TextView category = new TextView(this);
+//        category.setText(c.getName());
+//        ll.addView(category);
+//
+//        container.addView(ll);
+//    }
+
     private void addTransaction(Transaction t, Category c) {
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.HORIZONTAL);
+        ll.setPadding(16, 16, 16, 16);
+
+        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        rowParams.setMargins(0, 8, 0, 8);
+        ll.setLayoutParams(rowParams);
+
+        LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1.0f
+        );
 
         TextView expenseName = new TextView(this);
         expenseName.setText(t.name);
+        expenseName.setLayoutParams(textParams);
         ll.addView(expenseName);
 
         TextView amount = new TextView(this);
-        amount.setText(String.valueOf(t.getAmount()));
+        amount.setText(String.format("$%.2f", t.getAmount()));
+        amount.setLayoutParams(textParams);
         ll.addView(amount);
 
-        TextView category = new TextView(this);
-        category.setText(c.getName());
-        ll.addView(category);
+        TextView categoryView = new TextView(this);
+        categoryView.setText(c.getName());
+        categoryView.setLayoutParams(textParams);
+        ll.addView(categoryView);
 
         container.addView(ll);
     }
+
 }
